@@ -7,10 +7,13 @@ import android.util.Log;
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.DisconnectedBufferOptions;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.IMqttToken;
+import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
@@ -19,27 +22,61 @@ public class PahoMqttClient {
 
     private static final String TAG = "PahoMqttClient";
     private MqttAndroidClient mqttAndroidClient;
+    private final MemoryPersistence persistence = new MemoryPersistence();
+
+
+
 
     public MqttAndroidClient getMqttClient(Context context, String brokerUrl, String clientId , List<String> topics,String user_name,
                                            String password) {
 
-        mqttAndroidClient = new MqttAndroidClient(context, brokerUrl, clientId);
+        mqttAndroidClient = new MqttAndroidClient(context, brokerUrl, "androidSampleClient",persistence);
+        mqttAndroidClient.setCallback(new MqttCallback() {
+            @Override
+            public void connectionLost(Throwable throwable) {
+                System.out.println("Connection lost");
+            }
+
+            @Override
+            public void messageArrived(String s, MqttMessage mqttMessage) throws Exception {
+                System.out.println("Message Arrived");
+            }
+
+            @Override
+            public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {
+                System.out.println("Delivery Complete");
+            }
+        });
+
+        MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
+        mqttConnectOptions.setUserName("user");
+        mqttConnectOptions.setPassword("pass".toCharArray());
+        mqttConnectOptions.setCleanSession(true);
+
         try {
-            IMqttToken token = mqttAndroidClient.connect(getMqttConnectionOption(topics,user_name,password));
-            token.setActionCallback(new IMqttActionListener() {
+            mqttAndroidClient.connect(mqttConnectOptions, null, new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
-                    mqttAndroidClient.setBufferOpts(getDisconnectedBufferOptions());
-                    Log.d(TAG, "Success");
+                    System.out.println("Connection Success!");
+                    try {
+                        System.out.println("Subscribing to /test");
+                        mqttAndroidClient.subscribe("/test", 0);
+                        System.out.println("Subscribed to /test");
+                        System.out.println("Publishing message..");
+                        mqttAndroidClient.publish("/test", new MqttMessage("Hello world testing..!".getBytes()));
+                    } catch (MqttException ex) {
+
+                    }
                 }
 
                 @Override
                 public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-                    Log.d(TAG, "Failure " + exception.toString());
+                    System.out.println("Connection Failure!");
+                    System.out.println("throwable: " + exception.toString());
                 }
             });
-        } catch (MqttException e) {
-            e.printStackTrace();
+        } catch (MqttException ex) {
+            System.out.println(ex.toString());
         }
 
         return mqttAndroidClient;

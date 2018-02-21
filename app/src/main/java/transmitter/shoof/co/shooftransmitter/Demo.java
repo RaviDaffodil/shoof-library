@@ -20,16 +20,29 @@ public class Demo extends AppCompatActivity implements ShoofAdvertiseListener {
 
     //list of uuid to listen
     List<String> uuidList=new ArrayList<>();
+    List<String> mTopics=new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        uuidList.add("de3ef22b-5e41-46fe-a517-f7af5f4ba681");
+        mTopics.add("st/downstream");
+
         //Init scanner
         ShoofScanner.getInstance(this);
 
+
+
+
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         //init mqtt server
-        ShoofScanner.initMqttServer(this,Constant.MQTT_BROKER_URL,Constant.CLIENT_ID,null,Constant.USER_ID,Constant.PASSWORD);
+        ShoofScanner.initMqttServer(this,Constant.MQTT_BROKER_URL,Constant.CLIENT_ID,uuidList,Constant.USER_ID,Constant.PASSWORD);
 
         //add list of bluetooth device uuids to listen from
         ShoofScanner.addUUIDToListen(uuidList);
@@ -37,9 +50,7 @@ public class Demo extends AppCompatActivity implements ShoofAdvertiseListener {
         //start listening from bluetooth devices
         ShoofScanner.startScan();
 
-
     }
-
 
     @Override
     protected void onDestroy() {
