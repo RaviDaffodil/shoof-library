@@ -65,7 +65,7 @@ public class ShoofScanner {
      * @param BROKER_URL URL of BROKER
      * @param CLIENT_ID Client id
      */
-    private static void initMqttServer(Context context,String BROKER_URL,String CLIENT_ID,List<String> topics,String username,String pass){
+    public static void initMqttServer(Context context,String BROKER_URL,String CLIENT_ID,List<String> topics,String username,String pass){
         pahoMqttClient = new PahoMqttClient();
         client=pahoMqttClient.getMqttClient(context,BROKER_URL,CLIENT_ID,topics,username,pass);
 
@@ -77,7 +77,7 @@ public class ShoofScanner {
      * @param msg string object to send data on mqtt server
      * @param topic topic name to send data on mqtt server
      */
-    private static void sendMqttData(String msg,String topic){
+    public static void sendMqttData(String msg,String topic){
         try{
             pahoMqttClient.publishMessage(client, msg, 1, topic);
 
@@ -121,7 +121,7 @@ public class ShoofScanner {
      *
      * @param time millisecond time ,after that scan will be terminated
      */
-    private static void initScanner(int time) {
+    public static void initScanner(int time) {
         mBluetoothLeScanner = BluetoothAdapter.getDefaultAdapter().getBluetoothLeScanner();
 
     }
@@ -131,7 +131,7 @@ public class ShoofScanner {
      *
      * @param uuidList
      */
-    private static void addUUIDToListen(List<String> uuidList) {
+    public static void addUUIDToListen(List<String> uuidList) {
         for (int i = 0; i < uuidList.size(); i++) {
             ScanFilter filter = new ScanFilter.Builder()
                     .setServiceUuid(new ParcelUuid(UUID.fromString(uuidList.get(i))))
@@ -143,7 +143,7 @@ public class ShoofScanner {
     /**
      * Will start listen the
      */
-    private void startScan() {
+    public static void startScan() {
         ScanSettings settings = new ScanSettings.Builder()
                 .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
                 .build();
@@ -159,9 +159,14 @@ public class ShoofScanner {
     /**
      * Call when client want to stop listening the bluetooth devices
      */
-    private static void stopScanning() {
+    public static void stopScanning() {
         if (mBluetoothLeScanner != null && mScanCallback != null)
             mBluetoothLeScanner.stopScan(mScanCallback);
+        try {
+            client.disconnect();
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
     }
 
 
