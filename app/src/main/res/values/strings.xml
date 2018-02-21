@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Shoof Transmitter</string>
+    <string name="ble_uuid">2f1f6020-8847-4342-b137-262987307e9b</string>
+</resources>
