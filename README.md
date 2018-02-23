@@ -12,7 +12,7 @@ Shoof Library is based on Bluetooth peripherals and MQTT Server.
 1. Include dependency in your app level build.gradle file.
 
 ```sh
-compile 'com.github.RaviDaffodil:shoof-library:1.3'
+compile 'com.github.RaviDaffodil:shoof-library:2.4'
 ```
 
 2. Include dependency in your project level build.gradle file.
@@ -45,25 +45,35 @@ compile 'com.github.RaviDaffodil:shoof-library:1.3'
 6. Add Following code in your onCreate() Method :
 ```sh
    //Init scanner
-        ShoofScanner.getInstance(this);
+   private ShoofScanner mShoofScanner;
+        mShoofScanner.getInstance(this);
+
+    // create mqtt options
+    MqttConnectOptions mqttConnectOptions=new MqttConnectOptions();
+     mqttConnectOptions.setCleanSession(true);
+
     //init mqtt server
-        ShoofScanner.initMqttServer(this,Constant.MQTT_BROKER_URL,Constant.CLIENT_ID,topicList,Constant.USER_ID,Constant.PASSWORD);
-        
-   //add list of bluetooth device uuids to listen from
-        ShoofScanner.addUUIDToListen(uuidList);
-        
-    //start listening from bluetooth devices
-        ShoofScanner.startScan();
+           mShoofScanner.initMqttServer(this,Constant.MQTT_BROKER_URL,Constant.CLIENT_ID,topicsList,Constant.USER_ID,Constant.PASSWORD,mqttConnectOptions,
+                   upStreamTopic,this);
+
+           //add list of bluetooth device uuids to listen from
+           mShoofScanner.addUUIDToListen(uuidList);
+
+           //start listening from bluetooth devices
+           mShoofScanner.startScan();
   
   <!--uuidList is list of bluetooth perepherals uuid's which need to be listen-->
   
   <!--topicList is list of topics which need to be subscribe on MQTT Broker-->
+  <!--upStreamTopic is Upstream topic-->
+
+
 ```
 
 7. Add Following code in your onDestroy() Method :
 ```sh
   //Stop scanning
-        ShoofScanner.stopScanning();
+        mShoofScanner.stopScanning();
   
 ```
 
@@ -80,7 +90,7 @@ compile 'com.github.RaviDaffodil:shoof-library:1.3'
         String data=scanResult.toString();
 
         //Send Data to MQTT SERVER
-        ShoofScanner.sendMqttData(data,"");
+        mShoofScanner.sendMqttData(data,"");
 
     }
   
