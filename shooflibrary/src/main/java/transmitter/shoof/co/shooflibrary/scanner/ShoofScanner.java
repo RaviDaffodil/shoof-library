@@ -28,32 +28,33 @@ import transmitter.shoof.co.shooflibrary.mqtt.PahoMqttClient;
 public class ShoofScanner {
 
     //MQTT client
-    private static MqttAndroidClient client;
+    private  MqttAndroidClient client;
     private String TAG = "ShoofScanner";
-    private static PahoMqttClient pahoMqttClient;
+    private  PahoMqttClient pahoMqttClient;
 
     //Discover
-    private static BluetoothLeScanner mBluetoothLeScanner;
-    private static Handler mHandler = new Handler();
-    private static List<ScanFilter> filters = new ArrayList<>();
+    private  BluetoothLeScanner mBluetoothLeScanner;
+    private  Handler mHandler = new Handler();
+    private  List<ScanFilter> filters = new ArrayList<>();
 
 
     //Shoof Listener
-    private static ShoofAdvertiseListener mShoofAdvertiseListener;
+    private  ShoofAdvertiseListener mShoofAdvertiseListener;
 
     //lazy instance of scanner class
-    private static ShoofScanner instance;
+    private  ShoofScanner instance;
 
 
     //private constructor to make singleton pattern
-    private ShoofScanner(ShoofAdvertiseListener shoofAdvertiseListener) {
+    public ShoofScanner(ShoofAdvertiseListener shoofAdvertiseListener) {
         this.mShoofAdvertiseListener = shoofAdvertiseListener;
+        mBluetoothLeScanner = BluetoothAdapter.getDefaultAdapter().getBluetoothLeScanner();
     }
 
 
 
     //init scanner class
-    public static ShoofScanner getInstance(ShoofAdvertiseListener shoofAdvertiseListener) {
+    public  ShoofScanner getInstance(ShoofAdvertiseListener shoofAdvertiseListener) {
         if (instance == null) {
             instance = new ShoofScanner(shoofAdvertiseListener);
             mBluetoothLeScanner = BluetoothAdapter.getDefaultAdapter().getBluetoothLeScanner();
@@ -68,7 +69,7 @@ public class ShoofScanner {
      * @param BROKER_URL URL of BROKER
      * @param CLIENT_ID Client id
      */
-    public static void initMqttServer(Context context,String BROKER_URL,String CLIENT_ID,List<String> topics,String username,String pass){
+    public  void initMqttServer(Context context,String BROKER_URL,String CLIENT_ID,List<String> topics,String username,String pass){
         pahoMqttClient = new PahoMqttClient();
         client=pahoMqttClient.getMqttClient(context,BROKER_URL,CLIENT_ID,topics,username,pass);
 
@@ -80,7 +81,7 @@ public class ShoofScanner {
      * @param msg string object to send data on mqtt server
      * @param topic topic name to send data on mqtt server
      */
-    public static void sendMqttData(String msg,String topic){
+    public  void sendMqttData(String msg,String topic){
         try{
             pahoMqttClient.publishMessage(client, msg, 1, topic);
 
@@ -92,7 +93,7 @@ public class ShoofScanner {
     }
 
     // Scan callback for client
-    private static ScanCallback mScanCallback = new ScanCallback() {
+    private  ScanCallback mScanCallback = new ScanCallback() {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
             if (mShoofAdvertiseListener != null) {
@@ -124,7 +125,7 @@ public class ShoofScanner {
      *
      * @param time millisecond time ,after that scan will be terminated
      */
-    public static void initScanner(int time) {
+    public  void initScanner(int time) {
         mBluetoothLeScanner = BluetoothAdapter.getDefaultAdapter().getBluetoothLeScanner();
 
     }
@@ -134,7 +135,7 @@ public class ShoofScanner {
      *
      * @param uuidList
      */
-    public static void addUUIDToListen(List<String> uuidList) {
+    public  void addUUIDToListen(List<String> uuidList) {
         for (int i = 0; i < uuidList.size(); i++) {
             ScanFilter filter = new ScanFilter.Builder()
                     .setServiceUuid(new ParcelUuid(UUID.fromString(uuidList.get(i))))
@@ -143,7 +144,7 @@ public class ShoofScanner {
         }
     }
 
-    public static boolean checkBluetooth(){
+    public  boolean checkBluetooth(){
         boolean isError=false;
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter == null) {
@@ -161,7 +162,7 @@ public class ShoofScanner {
     /**
      * Will start listen the
      */
-    public static void startScan() {
+    public  void startScan() {
 
 
        /* if(checkBluetooth()){
@@ -183,7 +184,7 @@ public class ShoofScanner {
     /**
      * Call when client want to stop listening the bluetooth devices
      */
-    public static void stopScanning() {
+    public  void stopScanning() {
         if (mBluetoothLeScanner != null && mScanCallback != null)
             mBluetoothLeScanner.stopScan(mScanCallback);
         try {

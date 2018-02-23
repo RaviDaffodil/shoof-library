@@ -23,6 +23,8 @@ public class Demo extends AppCompatActivity implements ShoofAdvertiseListener {
     List<String> uuidList=new ArrayList<>();
     List<String> mTopics=new ArrayList<>();
 
+    private ShoofScanner mShoofScanner;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,8 +33,7 @@ public class Demo extends AppCompatActivity implements ShoofAdvertiseListener {
         mTopics.add("st/downstream");
 
         //Init scanner
-        ShoofScanner.getInstance(this);
-
+        mShoofScanner=new ShoofScanner(this);
 
 
 
@@ -43,13 +44,13 @@ public class Demo extends AppCompatActivity implements ShoofAdvertiseListener {
     protected void onResume() {
         super.onResume();
         //init mqtt server
-        ShoofScanner.initMqttServer(this,Constant.MQTT_BROKER_URL,Constant.CLIENT_ID,uuidList,Constant.USER_ID,Constant.PASSWORD);
+        mShoofScanner.initMqttServer(this,Constant.MQTT_BROKER_URL,Constant.CLIENT_ID,uuidList,Constant.USER_ID,Constant.PASSWORD);
 
         //add list of bluetooth device uuids to listen from
-        ShoofScanner.addUUIDToListen(uuidList);
+        mShoofScanner.addUUIDToListen(uuidList);
 
         //start listening from bluetooth devices
-        ShoofScanner.startScan();
+        mShoofScanner.startScan();
 
     }
 
@@ -58,7 +59,7 @@ public class Demo extends AppCompatActivity implements ShoofAdvertiseListener {
         super.onDestroy();
 
         //Stop scanning
-        ShoofScanner.stopScanning();
+        mShoofScanner.stopScanning();
     }
 
     @Override
@@ -72,7 +73,7 @@ public class Demo extends AppCompatActivity implements ShoofAdvertiseListener {
         String data=scanResult.toString();
 
         //Send Data to MQTT SERVER
-        ShoofScanner.sendMqttData(data,"");
+        mShoofScanner.sendMqttData(data,"");
 
     }
 
