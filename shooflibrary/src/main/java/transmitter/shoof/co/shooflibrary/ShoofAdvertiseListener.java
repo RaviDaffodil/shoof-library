@@ -2,6 +2,9 @@ package transmitter.shoof.co.shooflibrary;
 
 import android.bluetooth.le.ScanResult;
 
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+
 import java.util.List;
 
 public interface ShoofAdvertiseListener {
@@ -23,6 +26,12 @@ public interface ShoofAdvertiseListener {
      * @param errorMessage
      */
     void onBluetoothError(int errorCode);
+
+    void connectionLost();
+
+    void messageArrived(String s, MqttMessage mqttMessage);
+
+    void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken);
 
 
 }

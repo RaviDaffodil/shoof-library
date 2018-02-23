@@ -70,9 +70,9 @@ public class ShoofScanner {
      * @param BROKER_URL URL of BROKER
      * @param CLIENT_ID Client id
      */
-    public  void initMqttServer(Context context, String BROKER_URL, String CLIENT_ID, List<String> topics, String username, String pass, MqttConnectOptions mqttConnectOptions){
+    public  void initMqttServer(Context context, String BROKER_URL, String CLIENT_ID, List<String> topics, String username, String pass, MqttConnectOptions mqttConnectOptions,String upTopic,ShoofAdvertiseListener shoofAdvertiseListener){
         pahoMqttClient = new PahoMqttClient();
-        client=pahoMqttClient.getMqttClient(context,BROKER_URL,CLIENT_ID,topics,username,pass, mqttConnectOptions);
+        client=pahoMqttClient.getMqttClient(context,BROKER_URL,CLIENT_ID,topics,username,pass, mqttConnectOptions,upTopic,shoofAdvertiseListener);
 
     }
 

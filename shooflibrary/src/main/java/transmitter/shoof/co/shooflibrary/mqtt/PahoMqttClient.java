@@ -17,33 +17,39 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+import transmitter.shoof.co.shooflibrary.ShoofAdvertiseListener;
+
 public class PahoMqttClient {
 
     private static final String TAG = "PahoMqttClient";
     private MqttAndroidClient mqttAndroidClient;
     private final MemoryPersistence persistence = new MemoryPersistence();
+    private ShoofAdvertiseListener mShoofAdvertiseListener;
 
 
 
-
-    public MqttAndroidClient getMqttClient(Context context, String brokerUrl, String clientId , List<String> topics,String user_name,
-                                           String password,MqttConnectOptions mqttConnectOptions) {
+    public MqttAndroidClient getMqttClient(Context context, String brokerUrl, String clientId , final List<String> topics, String user_name,
+                                           String password, MqttConnectOptions mqttConnectOptions, final String upTopic,ShoofAdvertiseListener shoofAdvertiseListener) {
 
         mqttAndroidClient = new MqttAndroidClient(context, brokerUrl, "androidSampleClient",persistence);
+        mShoofAdvertiseListener=shoofAdvertiseListener;
         mqttAndroidClient.setCallback(new MqttCallback() {
             @Override
             public void connectionLost(Throwable throwable) {
                 System.out.println("Connection lost");
+                mShoofAdvertiseListener.connectionLost();
             }
 
             @Override
             public void messageArrived(String s, MqttMessage mqttMessage) throws Exception {
                 System.out.println("Message Arrived");
+                mShoofAdvertiseListener.messageArrived(s,mqttMessage);
             }
 
             @Override
             public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {
                 System.out.println("Delivery Complete");
+                mShoofAdvertiseListener.deliveryComplete(iMqttDeliveryToken);
             }
         });
 
@@ -61,11 +67,15 @@ public class PahoMqttClient {
                 public void onSuccess(IMqttToken asyncActionToken) {
                     System.out.println("Connection Success!");
                     try {
-                        System.out.println("Subscribing to /test");
-                        mqttAndroidClient.subscribe("/test", 0);
-                        System.out.println("Subscribed to /test");
+                        System.out.println("Subscribing to st/$i/downstream");
+                        for(int i=0;i<topics.size();i++){
+                            mqttAndroidClient.subscribe(topics.get(i), 0);
+                            System.out.println("Subscribed to "+topics.get(i));
+                        }
+//                        mqttAndroidClient.subscribe("st/$i/downstream", 0);
+//                        System.out.println("Subscribed to /test");
                         System.out.println("Publishing message..");
-                        mqttAndroidClient.publish("/test", new MqttMessage("Hello world testing..!".getBytes()));
+                        mqttAndroidClient.publish(upTopic, new MqttMessage("Hello world testing..!".getBytes()));
                     } catch (MqttException ex) {
 
                     }

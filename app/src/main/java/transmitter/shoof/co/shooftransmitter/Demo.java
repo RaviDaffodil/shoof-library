@@ -9,8 +9,10 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +54,8 @@ public class Demo extends AppCompatActivity implements ShoofAdvertiseListener {
         mqttConnectOptions.setCleanSession(true);
 
         //init mqtt server
-        mShoofScanner.initMqttServer(this,Constant.MQTT_BROKER_URL,Constant.CLIENT_ID,uuidList,Constant.USER_ID,Constant.PASSWORD,mqttConnectOptions);
+        mShoofScanner.initMqttServer(this,Constant.MQTT_BROKER_URL,Constant.CLIENT_ID,uuidList,Constant.USER_ID,Constant.PASSWORD,mqttConnectOptions,
+                "/test",this);
 
         //add list of bluetooth device uuids to listen from
         mShoofScanner.addUUIDToListen(uuidList);
@@ -106,5 +109,20 @@ public class Demo extends AppCompatActivity implements ShoofAdvertiseListener {
     @Override
     public void onBluetoothError(int errorMessage) {
         Toast.makeText(this,String.valueOf(errorMessage),Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void connectionLost() {
+
+    }
+
+    @Override
+    public void messageArrived(String s, MqttMessage mqttMessage) {
+
+    }
+
+    @Override
+    public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {
+
     }
 }
