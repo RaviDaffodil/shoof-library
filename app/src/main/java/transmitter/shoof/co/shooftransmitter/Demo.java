@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
 
@@ -91,5 +92,10 @@ public class Demo extends AppCompatActivity implements ShoofAdvertiseListener {
         // int errorCode = 5; Fails to start scan as it is out of hardware resources.
         // int errorCode = 0; No Error.
 
+    }
+
+    @Override
+    public void onBluetoothError(String errorMessage) {
+        Toast.makeText(this,errorMessage,Toast.LENGTH_LONG).show();
     }
 }
