@@ -12,7 +12,7 @@ Shoof Library is based on Bluetooth peripherals and MQTT Server.
 1. Include dependency in your app level build.gradle file.
 
 ```sh
-compile 'com.github.RaviDaffodil:shoof-library:1.1'
+compile 'com.github.RaviDaffodil:shoof-library:1.3'
 ```
 
 2. Include dependency in your project level build.gradle file.
