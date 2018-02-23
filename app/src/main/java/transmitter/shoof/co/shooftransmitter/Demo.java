@@ -26,6 +26,7 @@ public class Demo extends AppCompatActivity implements ShoofAdvertiseListener {
 
     private ShoofScanner mShoofScanner;
 
+    MqttConnectOptions mqttConnectOptions;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +46,7 @@ public class Demo extends AppCompatActivity implements ShoofAdvertiseListener {
     protected void onResume() {
         super.onResume();
 
-        MqttConnectOptions mqttConnectOptions=new MqttConnectOptions();
+        mqttConnectOptions=new MqttConnectOptions();
         mqttConnectOptions.setUserName("user");
         mqttConnectOptions.setPassword("pass".toCharArray());
         mqttConnectOptions.setCleanSession(true);
