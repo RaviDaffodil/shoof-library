@@ -14,6 +14,7 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.io.UnsupportedEncodingException;
@@ -69,9 +70,9 @@ public class ShoofScanner {
      * @param BROKER_URL URL of BROKER
      * @param CLIENT_ID Client id
      */
-    public  void initMqttServer(Context context,String BROKER_URL,String CLIENT_ID,List<String> topics,String username,String pass){
+    public  void initMqttServer(Context context, String BROKER_URL, String CLIENT_ID, List<String> topics, String username, String pass, MqttConnectOptions mqttConnectOptions){
         pahoMqttClient = new PahoMqttClient();
-        client=pahoMqttClient.getMqttClient(context,BROKER_URL,CLIENT_ID,topics,username,pass);
+        client=pahoMqttClient.getMqttClient(context,BROKER_URL,CLIENT_ID,topics,username,pass, mqttConnectOptions);
 
     }
 

@@ -27,7 +27,7 @@ public class PahoMqttClient {
 
 
     public MqttAndroidClient getMqttClient(Context context, String brokerUrl, String clientId , List<String> topics,String user_name,
-                                           String password) {
+                                           String password,MqttConnectOptions mqttConnectOptions) {
 
         mqttAndroidClient = new MqttAndroidClient(context, brokerUrl, "androidSampleClient",persistence);
         mqttAndroidClient.setCallback(new MqttCallback() {
@@ -47,13 +47,13 @@ public class PahoMqttClient {
             }
         });
 
-        MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
+        /*MqttConnectOptions mqttConnectOptions = mqttConnectOptions;
 
         if(user_name.length()>0)
         mqttConnectOptions.setUserName(user_name);
         if(password.length()>0)
         mqttConnectOptions.setPassword(password.toCharArray());
-        mqttConnectOptions.setCleanSession(true);
+        mqttConnectOptions.setCleanSession(true);*/
 
         try {
             mqttAndroidClient.connect(mqttConnectOptions, null, new IMqttActionListener() {

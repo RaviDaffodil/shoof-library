@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.util.ArrayList;
@@ -43,8 +44,14 @@ public class Demo extends AppCompatActivity implements ShoofAdvertiseListener {
     @Override
     protected void onResume() {
         super.onResume();
+
+        MqttConnectOptions mqttConnectOptions=new MqttConnectOptions();
+        mqttConnectOptions.setUserName("user");
+        mqttConnectOptions.setPassword("pass".toCharArray());
+        mqttConnectOptions.setCleanSession(true);
+
         //init mqtt server
-        mShoofScanner.initMqttServer(this,Constant.MQTT_BROKER_URL,Constant.CLIENT_ID,uuidList,Constant.USER_ID,Constant.PASSWORD);
+        mShoofScanner.initMqttServer(this,Constant.MQTT_BROKER_URL,Constant.CLIENT_ID,uuidList,Constant.USER_ID,Constant.PASSWORD,mqttConnectOptions);
 
         //add list of bluetooth device uuids to listen from
         mShoofScanner.addUUIDToListen(uuidList);
