@@ -38,6 +38,7 @@ public class ShoofScanner {
     private static Handler mHandler = new Handler();
     private static List<ScanFilter> filters = new ArrayList<>();
 
+
     //Shoof Listener
     private static ShoofAdvertiseListener mShoofAdvertiseListener;
 
@@ -49,6 +50,8 @@ public class ShoofScanner {
     private ShoofScanner(ShoofAdvertiseListener shoofAdvertiseListener) {
         this.mShoofAdvertiseListener = shoofAdvertiseListener;
     }
+
+
 
     //init scanner class
     public static ShoofScanner getInstance(ShoofAdvertiseListener shoofAdvertiseListener) {
@@ -145,11 +148,11 @@ public class ShoofScanner {
         boolean isError=false;
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter == null) {
-            mShoofAdvertiseListener.onBluetoothError("Bluettoth not supported");
+            mShoofAdvertiseListener.onBluetoothError(1);
             isError=true;
         } else {
             if (!mBluetoothAdapter.isEnabled()) {
-               mShoofAdvertiseListener.onBluetoothError("Please enable the Bluetooth and Restart the app");
+               mShoofAdvertiseListener.onBluetoothError(2);
                isError=true;
             }
         }

@@ -95,7 +95,7 @@ public class Demo extends AppCompatActivity implements ShoofAdvertiseListener {
     }
 
     @Override
-    public void onBluetoothError(String errorMessage) {
-        Toast.makeText(this,errorMessage,Toast.LENGTH_LONG).show();
+    public void onBluetoothError(int errorMessage) {
+        Toast.makeText(this,String.valueOf(errorMessage),Toast.LENGTH_LONG).show();
     }
 }

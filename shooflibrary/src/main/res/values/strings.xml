@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Shoof Library</string>
+    <string name="error1">Shoof Library</string>
+    <string name="error2">Shoof Library</string>
 </resources>
