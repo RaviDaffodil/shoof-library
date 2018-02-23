@@ -164,9 +164,9 @@ public class ShoofScanner {
     public static void startScan() {
 
 
-        if(checkBluetooth()){
+       /* if(checkBluetooth()){
             return;
-        }
+        }*/
 
         ScanSettings settings = new ScanSettings.Builder()
                 .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
