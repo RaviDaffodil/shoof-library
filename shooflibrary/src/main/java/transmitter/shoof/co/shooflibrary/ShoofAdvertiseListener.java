@@ -18,5 +18,11 @@ public interface ShoofAdvertiseListener {
      */
      void onScanError(int errorCode);
 
+    /**
+     * will be called when bluetooth error occures
+     * @param errorMessage
+     */
+    void onBluetoothError(String errorMessage);
+
 
 }

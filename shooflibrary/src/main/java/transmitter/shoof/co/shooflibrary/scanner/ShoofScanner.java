@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.os.ParcelUuid;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -140,10 +141,28 @@ public class ShoofScanner {
         }
     }
 
+    private static boolean checkBluetooth(){
+        boolean isError=false;
+        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (mBluetoothAdapter == null) {
+            mShoofAdvertiseListener.onBluetoothError("Bluettoth not supported");
+            isError=true;
+        } else {
+            if (!mBluetoothAdapter.isEnabled()) {
+               mShoofAdvertiseListener.onBluetoothError("Please enable the Bluetooth and Restart the app");
+               isError=true;
+            }
+        }
+        return isError;
+    }
+
     /**
      * Will start listen the
      */
     public static void startScan() {
+
+
+
         ScanSettings settings = new ScanSettings.Builder()
                 .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
                 .build();
