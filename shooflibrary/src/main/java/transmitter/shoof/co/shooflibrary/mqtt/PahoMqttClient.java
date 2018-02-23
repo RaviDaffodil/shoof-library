@@ -2,7 +2,6 @@ package transmitter.shoof.co.shooflibrary.mqtt;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.DisconnectedBufferOptions;
@@ -90,12 +89,12 @@ public class PahoMqttClient {
         mqttToken.setActionCallback(new IMqttActionListener() {
             @Override
             public void onSuccess(IMqttToken iMqttToken) {
-                Log.d(TAG, "Successfully disconnected");
+                System.out.println( "Successfully disconnected");
             }
 
             @Override
             public void onFailure(IMqttToken iMqttToken, Throwable throwable) {
-                Log.d(TAG, "Failed to disconnected " + throwable.toString());
+                System.out.println( "Failed to disconnected " + throwable.toString());
             }
         });
     }
@@ -142,12 +141,12 @@ public class PahoMqttClient {
         token.setActionCallback(new IMqttActionListener() {
             @Override
             public void onSuccess(IMqttToken iMqttToken) {
-                Log.d(TAG, "Subscribe Successfully " + topic);
+                System.out.println( "Subscribe Successfully " + topic);
             }
 
             @Override
             public void onFailure(IMqttToken iMqttToken, Throwable throwable) {
-                Log.e(TAG, "Subscribe Failed " + topic);
+                System.out.println( "Subscribe Failed " + topic);
 
             }
         });
@@ -160,12 +159,12 @@ public class PahoMqttClient {
         token.setActionCallback(new IMqttActionListener() {
             @Override
             public void onSuccess(IMqttToken iMqttToken) {
-                Log.d(TAG, "UnSubscribe Successfully " + topic);
+                System.out.println( "UnSubscribe Successfully " + topic);
             }
 
             @Override
             public void onFailure(IMqttToken iMqttToken, Throwable throwable) {
-                Log.e(TAG, "UnSubscribe Failed " + topic);
+                System.out.println( "UnSubscribe Failed " + topic);
             }
         });
     }

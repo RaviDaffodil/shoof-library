@@ -11,7 +11,6 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.ParcelUuid;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Toast;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
@@ -176,7 +175,7 @@ public class ShoofScanner {
         if (mScanCallback != null)
             mBluetoothLeScanner.startScan(filters, settings, mScanCallback);
         else
-            Log.e("Scan listener error", "Scan listener not initialized");
+            System.out.println( "Scan listener not initialized");
     }
 
 
